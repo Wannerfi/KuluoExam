@@ -5,18 +5,15 @@ using UnityEngine;
 
 public class Pawn : MonoBehaviour
 {
+    public virtual void Init() {}
+    
     public virtual void Begin() {}
     
     public virtual bool IsFinished()
     {
         return false;
     }
-    
-    public virtual Status GetMyStatus()
-    {
-        return Status.None;
-    }
-    
+
     public virtual void ChooseGuid(int index){}
 
     public virtual void Reset()

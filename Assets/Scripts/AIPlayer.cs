@@ -17,22 +17,14 @@ public class AIPlayer : Pawn
         isfinished = false;
     }
 
-    public delegate void PrintShowText(string str);
-    public event PrintShowText ShowText;
-
-    public override void Reset()
-    {
-        ShowText = null;
-    }
-
     private List<string> ridicuteText = new List<string>()
     {
         "你会输的",
         "给我时间想想",
-        "哈哈哈，你个辣鸡",
+        "哈哈哈",
         "屑,啊哈",
         "要不送你悦刻五代抽抽",
-        "别闹，小玩意儿"
+        "别闹"
     };
     
     public override void Begin()
@@ -40,19 +32,14 @@ public class AIPlayer : Pawn
         isfinished = false;
 
         var str = ridicuteText[Random.Range(0, ridicuteText.Count)];
-        ShowText.Invoke(str);
-        float delay = Random.Range(.3f, 1.3f);
+        GameStatus.Instance.ShowLog(str);
+        float delay = Random.Range(.3f, .8f);
         Invoke("ChooseGrid", delay);
     }
 
     public override bool IsFinished()
     {
         return isfinished;
-    }
-
-    public override Status GetMyStatus()
-    {
-        return myStatus;
     }
 
     private List<Func<int>> aiPip = new List<Func<int>>();

@@ -6,15 +6,25 @@ public class Chess
 {
     private int[] grids = new int[9];
     private ItemStatus[] gridItem = new ItemStatus[9];
-    
+    private List<int> overIndex = new List<int>();
+
     public void AddGridItem(ItemStatus s)
     {
         gridItem[s.number] = s;
     }
 
+    public void ShowOverGridItem()
+    {
+        foreach (var o in overIndex)
+        {
+            gridItem[o].Buling();
+        }
+    }
+
     public void Reset()
     {
         grids = new int[9];
+        overIndex = new List<int>();
         foreach (var i in gridItem)
         {
             i.Reset();
@@ -47,15 +57,7 @@ public class Chess
         return res;
     }
 
-    private List<int> overIndex = new List<int>();
-
-    public List<int> OverIndex
-    {
-        get
-        {
-            return overIndex;
-        }
-    }
+    
     public bool IsOver()
     {
         int cAll = (int)Status.Cross;
@@ -85,13 +87,13 @@ public class Chess
         {
             if ((value == grids[i * 3]) && (value == grids[i * 3 + 1]) && (value == grids[i * 3 + 2]))
             {
-                linkIndex = new List<int>() { grids[i * 3], grids[i * 3 + 1], grids[i * 3 + 2] };
+                linkIndex = new List<int>() { i * 3, i * 3 + 1, i * 3 + 2 };
                 return true;
             }
 
             if ((value == grids[i]) && (value == grids[3 + i]) && (value == grids[6 + i]))
             {
-                linkIndex = new List<int>() { grids[i], grids[3 + i], grids[6 + i] };
+                linkIndex = new List<int>() { i, 3 + i, 6 + i };
                 return true;
             }
         }
@@ -104,13 +106,13 @@ public class Chess
     {
         if ((value == grids[0]) && (value == grids[4]) && (value == grids[8]))
         {
-            linkIndex = new List<int>() { grids[0], grids[4], grids[8] };
+            linkIndex = new List<int>() { 0, 4, 8 };
             return true;
         }
 
         if ((value == grids[2]) && (value == grids[4]) && (value == grids[6]))
         {
-            linkIndex = new List<int>() { grids[2], grids[4], grids[6] };
+            linkIndex = new List<int>() { 2, 4, 6 };
             return true;
         }
 

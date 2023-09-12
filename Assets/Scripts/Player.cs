@@ -24,12 +24,7 @@ public class Player : Pawn
     {
         return isfinished;
     }
-    
-    public override Status GetMyStatus()
-    {
-        return myStatus;
-    }
-    
+
     public override void ChooseGuid(int index)
     {
         var chess = GameStatus.GetChess();

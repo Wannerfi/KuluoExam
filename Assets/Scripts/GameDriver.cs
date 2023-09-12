@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,61 +8,39 @@ public class GameDriver : MonoBehaviour
 {
     public Player Player;
     public AIPlayer AIPlayer;
-    private List<Pawn> playerList = new List<Pawn>();
     
     private int curPlayer = 0;
     private bool isPlaying;
     
     public Pawn GetCurPawn()
     {
-        return playerList[curPlayer];
+        return GameStatus.Instance.PlayerList[curPlayer];
     }
 
-    private Text gameText;
-    private GameObject Begin;
-    
+    private PanelUIController panelController = new PanelUIController();
+
+    private void Awake()
+    {
+        GameStatus.Instance.Init(this);
+        panelController.Init();
+    }
+
     void Start()
     {
-        gameText = GameObject.Find("Canvas/Panel/Text").GetComponent<Text>();
-        Begin = GameObject.Find("Canvas/Panel/Controller/Begin");
-        var beginBtn = Begin.GetComponent<Button>();
-        beginBtn.onClick.AddListener(ResetGame);
-    }
-
-    void ResetGame()
-    {
-        GameStatus.GetChess().Reset();
-        foreach (var p in playerList)
+        panelController.Begin.GetComponent<Button>().onClick.AddListener(() =>
         {
-            p.Reset();
-        }
-        
-        curPlayer = 0;
-        playerList = new List<Pawn>();
-        string showText = null;
-        if (GameObject.Find("Canvas/Panel/Controller/Toggle").GetComponent<Toggle>().isOn)
-        {
-            playerList.Add(Player);
-            playerList.Add(AIPlayer);
-            showText = "你是先手";
-        }
-        else
-        {
-            playerList.Add(AIPlayer);
-            playerList.Add(Player);
-            showText = "后手怎么赢啊";
-        }
-
-        AIPlayer.ShowText += ShowText;
-        gameText.text = showText;
-        Begin.GetComponent<Text>().text = "重新开始";
-        isPlaying = true;
-        playerList[curPlayer].Begin();
+            GameStatus.Instance.Reset(Player, AIPlayer, panelController.playerInitiativeToggle.isOn);
+            panelController.Reset();
+            
+            curPlayer = 0;
+            isPlaying = true;
+            GetCurPawn().Begin();
+        });
     }
 
     private void Update()
     {
-        if (isPlaying && playerList[curPlayer].IsFinished())
+        if (isPlaying && GetCurPawn().IsFinished())
         {
             if (GameStatus.IsGameOver())
             {
@@ -70,19 +49,20 @@ public class GameDriver : MonoBehaviour
                 return;
             }
             
-            curPlayer = (curPlayer + 1) % playerList.Count;
-            playerList[curPlayer].Begin();
+            curPlayer = (curPlayer + 1) % GameStatus.Instance.PlayerList.Count;
+            GetCurPawn().Begin();
         }
     }
 
     private void ShowOver()
     {
-        gameText.text = "Game Over";
-        gameText.color = Color.red;
+        panelController.log.text = "Game Over";
+        panelController.log.color = Color.red;
+        GameStatus.GetChess().ShowOverGridItem();
     }
 
-    private void ShowText(string str)
+    public void ShowText(string str)
     {
-        gameText.text = str;
+        panelController.log.text = str;
     }
 }

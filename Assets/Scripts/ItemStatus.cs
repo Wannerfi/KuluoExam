@@ -40,7 +40,6 @@ public class ItemStatus : MonoBehaviour
         }
     }
     
-    private Status curStatus = Status.None;
     private Image imageComp;
     private Button button;
 
@@ -48,9 +47,14 @@ public class ItemStatus : MonoBehaviour
 
     public void Reset()
     {
-        curStatus = Status.None;
         ChangeStatus(Status.None);
         button.enabled = true;
+        imageComp.color = Color.white;
+    }
+
+    public void Buling()
+    {
+        imageComp.color = Color.red;
     }
 
     private void Awake()
