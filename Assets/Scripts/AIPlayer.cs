@@ -125,17 +125,17 @@ public class AIPlayer : Pawn
         }
 
         int random = Random.Range(0, 3);
-        for (int i = 0;i < 3; ++i, ++random)
+        for (int i = 0;i < 3; ++i, random = (random + 1) % indexProp2.Length)
         {
             if (!chess.IsSet(random) && !chess.IsSet((random + 1) % indexProp2.Length))
                 return random;
         }
         random = Random.Range(0, 3);
-        for (int i = 0;i < 3; ++i, ++random)
+        for (int i = 0;i < 3; ++i, random = (random + 1) % indexProp2.Length)
             if (!chess.IsSet(random)) return random;
 
         random = Random.Range(0, 3);
-        for (int i = 0;i < 3; ++i, ++random)
+        for (int i = 0;i < 3; ++i, random = (random + 1) % indexProp3.Length)
         {
             if (!chess.IsSet(random)) return random;
         }
