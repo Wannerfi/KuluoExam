@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GameDriver : MonoBehaviour
 {
-    public Pawn Player;
-    public Pawn AIPlayer;
+    public Player Player;
+    public AIPlayer AIPlayer;
     private List<Pawn> playerList = new List<Pawn>();
     
     private int curPlayer = 0;
@@ -31,6 +31,11 @@ public class GameDriver : MonoBehaviour
     void ResetGame()
     {
         GameStatus.GetChess().Reset();
+        foreach (var p in playerList)
+        {
+            p.Reset();
+        }
+        
         curPlayer = 0;
         playerList = new List<Pawn>();
         string showText = null;
@@ -46,7 +51,8 @@ public class GameDriver : MonoBehaviour
             playerList.Add(Player);
             showText = "后手怎么赢啊";
         }
-        
+
+        AIPlayer.ShowText += ShowText;
         gameText.text = showText;
         Begin.GetComponent<Text>().text = "重新开始";
         isPlaying = true;
@@ -73,5 +79,10 @@ public class GameDriver : MonoBehaviour
     {
         gameText.text = "Game Over";
         gameText.color = Color.red;
+    }
+
+    private void ShowText(string str)
+    {
+        gameText.text = str;
     }
 }

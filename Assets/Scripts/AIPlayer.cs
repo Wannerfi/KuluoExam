@@ -17,11 +17,32 @@ public class AIPlayer : Pawn
         isfinished = false;
     }
 
+    public delegate void PrintShowText(string str);
+    public event PrintShowText ShowText;
+
+    public override void Reset()
+    {
+        ShowText = null;
+    }
+
+    private List<string> ridicuteText = new List<string>()
+    {
+        "你会输的",
+        "给我时间想想",
+        "哈哈哈，你个辣鸡",
+        "屑,啊哈",
+        "要不送你悦刻五代抽抽",
+        "别闹，小玩意儿"
+    };
+    
     public override void Begin()
     {
         isfinished = false;
-        ChooseGrid();
-        isfinished = true;
+
+        var str = ridicuteText[Random.Range(0, ridicuteText.Count)];
+        ShowText.Invoke(str);
+        float delay = Random.Range(.3f, 1.3f);
+        Invoke("ChooseGrid", delay);
     }
 
     public override bool IsFinished()
@@ -45,9 +66,10 @@ public class AIPlayer : Pawn
             if (index != -1)
             {
                 ChooseGuid(index);
-                return;
+                break;
             }
         }
+        isfinished = true;
     }
 
     public override void ChooseGuid(int index)
@@ -102,17 +124,20 @@ public class AIPlayer : Pawn
             }
         }
 
-        foreach (var i in indexProp2)
+        int random = Random.Range(0, 3);
+        for (int i = 0;i < 3; ++i, ++random)
         {
-            if (!chess.IsSet(i) && !chess.IsSet((i + 1) % indexProp2.Length))
-                return i;
+            if (!chess.IsSet(random) && !chess.IsSet((random + 1) % indexProp2.Length))
+                return random;
         }
-        foreach (var i in indexProp2)
-            if (!chess.IsSet(i)) return i;
+        random = Random.Range(0, 3);
+        for (int i = 0;i < 3; ++i, ++random)
+            if (!chess.IsSet(random)) return random;
 
-        foreach (var i in indexProp3)
+        random = Random.Range(0, 3);
+        for (int i = 0;i < 3; ++i, ++random)
         {
-            if (!chess.IsSet(i)) return i;
+            if (!chess.IsSet(random)) return random;
         }
         return -1;
     }

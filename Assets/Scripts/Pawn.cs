@@ -18,4 +18,8 @@ public class Pawn : MonoBehaviour
     }
     
     public virtual void ChooseGuid(int index){}
+
+    public virtual void Reset()
+    {
+    }
 }
